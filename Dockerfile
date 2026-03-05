@@ -1,9 +1,19 @@
-FROM python:3.9
+FROM ubuntu:latest
 
+# Install dos2unix utility
+RUN apt-get update && apt-get install -y dos2unix
+
+# Set the working directory
 WORKDIR /app
 
-COPY . .
+# Copy the calculator.sh script into the container
+COPY calculator.sh /app/calculator.sh
 
-RUN pip install pytest
+# Convert line endings to Unix-style
+RUN dos2unix /app/calculator.sh
 
-CMD ["python","calculator.py"]
+# Ensure the script has execute permissions
+RUN chmod +x /app/calculator.sh
+
+# Set the default command to execute calculator.sh
+CMD ["bash", "/app/calculator.sh"]
